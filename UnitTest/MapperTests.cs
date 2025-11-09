@@ -91,5 +91,32 @@ namespace UnitTest
 			// ExtraProperty should not be changed
 			Assert.Equal("Default", dto.ExtraProperty);
 		}
+
+		[Fact]
+		public void Map_Should_Skip_Incompatible_Types_Safely()
+		{
+			// Arrange
+			var model = new Model(5, "ExtraTest", "Value", DateTime.Now);
+
+			// Act
+			var dto = Mapper.Map<DtoWithIdAsString>(model);
+
+			// Assert
+			Assert.Equal(model.Name, dto.Name);
+			Assert.Equal(model.CreatedAt, dto.CreatedAt);
+			Assert.Equal(model.NullableProperty, dto.NullableProperty);
+			Assert.Equal(default, dto.Id);
+
+			Assert.NotNull(dto);
+		}
+
+		/*
+		 * 
+		 * 		public string Id { get; set; } = "";
+		public string Name { get; set; } = "";
+		public string? NullableProperty { get; set; }
+		public DateTime CreatedAt { get; set; }
+		public string ExtraProperty { get; set; } = "Default"; // Should not be overwritten
+		*/
 	}
 }
