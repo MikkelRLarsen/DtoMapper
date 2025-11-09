@@ -29,6 +29,9 @@ namespace DtoMapper
 				// Find a Property in source which has the same name. Such as Dto.Id and Source.Id
 				if (sourcePropertiesAsDictonary.TryGetValue(tDestinationProperty.Name, out var sourceProperty))
 				{
+					// Checks if desitnationProperty is of same type as sourceProperty. Example is both ints or is one string and the other an int
+					if (!tDestinationProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType)) continue;
+
 					// Sets the destinationProperty on the implementation of TDestiantion with the souceproperty from sourceImplementation
 					tDestinationProperty.SetValue(destination, sourceProperty.GetValue(source));
 				}
